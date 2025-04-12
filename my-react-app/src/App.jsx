@@ -1,18 +1,18 @@
 import { useState } from 'react';
 
 export default function App() {
-  const [raw, setRaw] = useState('');
-  const [out, setOut] = useState('');
+  const [inputValue, setInputValue] = useState('');
+  const [shortenedUrl, setShortenedUrl] = useState('');
 
   const handleButton = async (e) => {
     e.preventDefault();
     const response = await fetch('http://localhost:5000/shorten', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ 'originalUrl': raw })
+      body: JSON.stringify({ 'originalUrl': inputValue })
     });
     const data = await response.json();
-    setOut(data.shortUrl);
+    setShortenedUrl(data.shortUrl);
   };
 
   return (
@@ -28,19 +28,19 @@ export default function App() {
       <form onSubmit={handleButton} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
         <input
           type="text"
-          value={raw}
-          onChange={(e) => setRaw(e.target.value)}
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
           placeholder="Enter your long URL here..."
           style={{ width: '300px', padding: '8px' }}
           required
         />
         <button style={{ marginLeft: '10px', padding: '6px', color: "green" }}>SEND</button>
       </form>
-      {out && (
+      {shortenedUrl && (
         <p style={{ marginTop: '30px' }}>
           Your shortened URL is: 
           {' '}
-          <a href={out} target="_blank">{out}</a>
+          <a href={shortenedUrl} target="_blank">{shortenedUrl}</a>
         </p>
       )}
     </main>
